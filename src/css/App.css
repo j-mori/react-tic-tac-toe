@@ -1,0 +1,38 @@
+.app {
+  text-align: center;
+}
+
+.app-header {
+  background-color: #282c34;
+  min-height: 8vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.menu{
+  max-width: 335px;
+  margin: auto;
+}
+.history-container{
+  max-width: 720px;
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .menu,.history-container{
+    max-width: 90vw;
+  }
+}
+
+.game-history-row{
+  background-color: #dddddd;
+  border: #282c34;
+  border-radius: 4px;
+  padding: 12px;
+  cursor: pointer;
+}
+
