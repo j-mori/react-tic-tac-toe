@@ -6,11 +6,12 @@ import {useLocation} from "react-router-dom";
 
 function Game(props) {
 
+    const gameMode = props.gameMode ?? 'pvc';
     // Save current game progress in local storage
     function saveGameProgress(squaresSetup){
-        localStorage.setItem('currentGame',JSON.stringify({
-            'squaresSetups':squaresSetup,
-        }))
+        const currentGame = JSON.parse( localStorage.getItem('currentGame') ??  '{}')
+        currentGame[gameMode] = {'squaresSetups':squaresSetup}
+        localStorage.setItem('currentGame',JSON.stringify(currentGame))
     }
 
     //Save the game in the game history local storage
@@ -39,16 +40,13 @@ function Game(props) {
         preloadGame = state.preloadGame
     }else{
         try{
-            preloadGame = JSON.parse(localStorage.getItem('currentGame')).squaresSetups
+            preloadGame = JSON.parse(localStorage.getItem('currentGame'))[gameMode].squaresSetups
         }catch (e){}
     }
-
     preloadGame = preloadGame ?? Array(9).fill(null);
-
-
     return (
         <div>
-            <Board gameMode={props.gameMode ?? 'pvc'} preloadGame={preloadGame} onNewGame={saveGamesHistory} onGameProgress={saveGameProgress} />
+            <Board gameMode={gameMode} preloadGame={preloadGame} onNewGame={saveGamesHistory} onGameProgress={saveGameProgress} />
         </div>
     );
 }

@@ -8,14 +8,14 @@ function calculateNextValue(squares) {
     return squares.filter(Boolean).length % 2 === 0 ? 'X' : 'O'
 }
 
-function retrieveStatusMessage(winner, squares, nextValue) {
+function retrieveStatusMessage(winner, squares, nextValue, cpuPlayer = null) {
     if(winner){
         return ( <div> {renderPlayerSymbol(winner)} It's skyroketing! 🎉</div>)
     }
     if(squares.every(Boolean)){
         return ( <div>Perfectly balanced as all things should be</div>)
     }
-    return (<div>{renderPlayerSymbol(nextValue)} Move next</div>)
+    return (<div>{renderPlayerSymbol(nextValue)} {cpuPlayer===nextValue ? ' (CPU) ' : ''} Move next</div>)
 }
 
 function anotherMoveAvailable(winner, squares) {
@@ -56,7 +56,7 @@ function renderPlayerSymbol(player) {
 
 function Board(props) {
 
-    const [squares, setSquares] = React.useState(Array(9).fill(null))
+    const [squares, setSquares] = React.useState(props.preloadGame ?? Array(9).fill(null))
     const [cpuPlayer, setCpuPlayer] = React.useState(randomizeCpuPlayer())
 
     useEffect(() => {
@@ -65,13 +65,6 @@ function Board(props) {
             props.onGameProgress(squares);
         }
     }, [squares])
-
-    useEffect(() => {
-        //Eventually preload a game status
-        if (props.preloadGame) {
-            setSquares(props.preloadGame)
-        }
-    }, [])
 
     function selectSquare(square, isHumanMoving = true) {
 
@@ -125,7 +118,7 @@ function Board(props) {
 
     return (
         <div>
-            <div className="mt-2 h4"><h4>{retrieveStatusMessage(winner, squares, nextValue)}</h4></div>
+            <div className="mt-2 h4"><h4>{retrieveStatusMessage(winner, squares, nextValue, cpuPlayer)}</h4></div>
             <div className="board-container mt-4">
                 <div className="board-row">
                     {renderSquare(0)}
