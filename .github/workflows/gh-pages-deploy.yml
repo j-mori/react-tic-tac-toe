@@ -1,4 +1,4 @@
-name: Deploy to GitHub pages
+name: Build and checkout to GitHub Pages
 on:
   push:
     branches: [ master ]
@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Create React build
+      - name: Run tests and build
         uses: actions/setup-node@v2
         with:
           node-version: '16'
@@ -26,9 +26,10 @@ jobs:
           git config --local user.name "GitHub Action"
           git commit -m 'deploy'
 
-      - name: Push to destination branch
+      - name: Push to gh-pages branch
         uses: ad-m/github-push-action@v0.5.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
           force: true
+          directory: ./build
