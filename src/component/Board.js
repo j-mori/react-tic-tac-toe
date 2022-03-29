@@ -1,17 +1,21 @@
-import React, {useEffect} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import '../css/Game.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import {calculateWinner} from "../utils/common";
+import {Button} from "react-bootstrap";
 
 function calculateNextValue(squares) {
     return squares.filter(Boolean).length % 2 === 0 ? 'X' : 'O'
 }
 
 function retrieveStatusMessage(winner, squares, nextValue) {
-    return winner
-        ? `Congrats to ${winner} 🎉`
-        : squares.every(Boolean)
-            ? `Perfectly balanced as all things should be`
-            : `Next player: ${nextValue}`
+    if(winner){
+        return ( <div> {renderPlayerSymbol(winner)} It's skyroketing! 🎉</div>)
+    }
+    if(squares.every(Boolean)){
+        return ( <div>Perfectly balanced as all things should be</div>)
+    }
+    return (<div>{renderPlayerSymbol(nextValue)} Move next</div>)
 }
 
 function anotherMoveAvailable(winner, squares) {
@@ -22,19 +26,30 @@ function anotherMoveAvailable(winner, squares) {
 
 function randomizeCpuPlayer() {
     const rnd = Math.floor(Math.random() * 2);
-    if(rnd===0){
+    if (rnd === 0) {
         return "X"
-    }else{
+    } else {
         return "O";
     }
 }
 
-function findRandomSquare(squares){
+function findRandomSquare(squares) {
     let rnd;
-    do{
+    do {
         rnd = Math.floor(Math.random() * 9);
-    }while(squares[rnd])
+    } while (squares[rnd])
     return rnd;
+}
+
+function renderPlayerSymbol(player) {
+    return (
+        <Fragment>
+            {player ? <img alt={player} width={30} src={require(
+                player === "X" ? "./../img/btc.png" : "./../img/eth.png"
+            )}/> : ""
+            }
+        </Fragment>
+    )
 }
 
 
@@ -45,23 +60,28 @@ function Board(props) {
     const [cpuPlayer, setCpuPlayer] = React.useState(randomizeCpuPlayer())
 
     useEffect(() => {
-        if(props.onGameProgress instanceof Function){
+        if (props.onGameProgress instanceof Function) {
+            //propagate gameProgress event to parent
             props.onGameProgress(squares);
         }
-    },[squares])
+    }, [squares])
 
     useEffect(() => {
-        console.log(props.squaresSetup);
-        if(props.squaresSetup){
-            setSquares(props.squaresSetup)
+        //Eventually preload a game status
+        if (props.preloadGame) {
+            setSquares(props.preloadGame)
         }
-    },[])
+    }, [])
 
-    function selectSquare(square,isHumanMoving=true) {
-        if (winner || squares[square]) {
+    function selectSquare(square, isHumanMoving = true) {
+
+        //check if the move is valid
+        if (square > 8 || winner || squares[square]) {
             return
         }
-        if(isHumanMoving && props.gameMode === "pvc" && cpuPlayer === nextValue){
+
+        //Check if is computer turn
+        if (isHumanMoving && props.gameMode === "pvc" && cpuPlayer === nextValue) {
             return;
         }
 
@@ -71,19 +91,20 @@ function Board(props) {
     }
 
     function restart() {
-        if(props.onNewGame instanceof Function){
+        if (props.onNewGame instanceof Function) {
+            //propagate newGame event to parent
             props.onNewGame(squares);
         }
-        if(props.gameMode==="pvc"){
+
+        if (props.gameMode === "pvc") {
             setCpuPlayer(randomizeCpuPlayer());
         }
         setSquares(Array(9).fill(null))
     }
-
     function renderSquare(i) {
         return (
             <button className="square" onClick={() => selectSquare(i)}>
-                {squares[i]}
+                {renderPlayerSymbol(squares[i])}
             </button>
         )
     }
@@ -95,16 +116,16 @@ function Board(props) {
 
 
     //Is CPU turn?
-    if(canMove && props.gameMode === "pvc" && cpuPlayer === nextValue){
+    if (canMove && props.gameMode === "pvc" && cpuPlayer === nextValue) {
         //Simulate CPU thinking
-        setTimeout(function (){
-            selectSquare(findRandomSquare(squares),false);
-        },Math.floor(Math.random() * (1800 - 900 + 1) + 900))
+        setTimeout(function () {
+            selectSquare(findRandomSquare(squares), false);
+        }, Math.floor(Math.random() * (1800 - 900 + 1) + 900))
     }
 
     return (
         <div>
-            <div className="mt-2"><h4>{retrieveStatusMessage(winner, squares, nextValue)}</h4></div>
+            <div className="mt-2 h4"><h4>{retrieveStatusMessage(winner, squares, nextValue)}</h4></div>
             <div className="board-container mt-4">
                 <div className="board-row">
                     {renderSquare(0)}
@@ -121,9 +142,9 @@ function Board(props) {
                     {renderSquare(7)}
                     {renderSquare(8)}
                 </div>
-                <button className="restart" onClick={restart}>
-                    new game!
-                </button>
+                <Button variant="primary" className="mt-5" onClick={restart}>
+                    start a new game!
+                </Button>
             </div>
         </div>
 
