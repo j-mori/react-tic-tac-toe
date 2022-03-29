@@ -48,7 +48,7 @@ function Game(props) {
 
     return (
         <div>
-            <Board gameMode={props.gameMode ?? 'pvc'} squaresSetup={preloadGame} onNewGame={saveGamesHistory} onGameProgress={saveGameProgress} />
+            <Board gameMode={props.gameMode ?? 'pvc'} preloadGame={preloadGame} onNewGame={saveGamesHistory} onGameProgress={saveGameProgress} />
         </div>
     );
 }

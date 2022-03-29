@@ -1,4 +1,4 @@
-import {Route, Routes} from 'react-router-dom'
+import {Route, Routes, useNavigate} from 'react-router-dom'
 import {Col, Row} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './css/App.css';
@@ -9,10 +9,12 @@ import History from "./component/History";
 
 
 function App() {
+    const navigate = useNavigate()
+
     return (
         <div className="app">
             <header className="app-header">
-                <h1 className="app-title">Tic tac toe!</h1>
+                <h1 onClick={() => {navigate('/')}} className="app-title">Tic tac toe!</h1>
             </header>
             <Routes>
                 <Route exact path="/" element={<Menu/>}/>
