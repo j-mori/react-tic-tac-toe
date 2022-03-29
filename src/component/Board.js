@@ -8,14 +8,14 @@ function calculateNextValue(squares) {
     return squares.filter(Boolean).length % 2 === 0 ? 'X' : 'O'
 }
 
-function retrieveStatusMessage(winner, squares, nextValue, cpuPlayer = null) {
+function retrieveStatusMessage(winner, squares, nextValue, cpuMoving = null) {
     if(winner){
         return ( <div> {renderPlayerSymbol(winner)} It's skyroketing! 🎉</div>)
     }
     if(squares.every(Boolean)){
         return ( <div>Perfectly balanced as all things should be</div>)
     }
-    return (<div>{renderPlayerSymbol(nextValue)} {cpuPlayer===nextValue ? ' (CPU) ' : ''} Move next</div>)
+    return (<div>{renderPlayerSymbol(nextValue)} {cpuMoving ? ' (CPU) ' : ''} Move next</div>)
 }
 
 function anotherMoveAvailable(winner, squares) {
@@ -74,13 +74,17 @@ function Board(props) {
         }
 
         //Check if is computer turn
-        if (isHumanMoving && props.gameMode === "pvc" && cpuPlayer === nextValue) {
+        if (isHumanMoving && isCpuTurn()) {
             return;
         }
 
         const _squares = [...squares]
         _squares[square] = nextValue
         setSquares(_squares)
+    }
+
+    function isCpuTurn(){
+        return props.gameMode === "pvc" && cpuPlayer === nextValue;
     }
 
     function restart() {
@@ -94,6 +98,7 @@ function Board(props) {
         }
         setSquares(Array(9).fill(null))
     }
+
     function renderSquare(i) {
         return (
             <button className="square" onClick={() => selectSquare(i)}>
@@ -109,7 +114,7 @@ function Board(props) {
 
 
     //Is CPU turn?
-    if (canMove && props.gameMode === "pvc" && cpuPlayer === nextValue) {
+    if (canMove && isCpuTurn()) {
         //Simulate CPU thinking
         setTimeout(function () {
             selectSquare(findRandomSquare(squares), false);
@@ -118,7 +123,7 @@ function Board(props) {
 
     return (
         <div>
-            <div className="mt-2 h4"><h4>{retrieveStatusMessage(winner, squares, nextValue, cpuPlayer)}</h4></div>
+            <div className="mt-2 h4"><h4>{retrieveStatusMessage(winner, squares, nextValue, isCpuTurn())}</h4></div>
             <div className="board-container mt-4">
                 <div className="board-row">
                     {renderSquare(0)}
