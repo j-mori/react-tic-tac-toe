@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import '../css/App.css';
 import Board from "./Board";
 import {useLocation} from "react-router-dom";

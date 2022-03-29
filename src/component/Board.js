@@ -64,7 +64,7 @@ function Board(props) {
             //propagate gameProgress event to parent
             props.onGameProgress(squares);
         }
-    }, [squares])
+    }, [props, squares])
 
     function selectSquare(square, isHumanMoving = true) {
 

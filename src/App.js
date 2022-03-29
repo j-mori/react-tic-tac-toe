@@ -1,5 +1,4 @@
 import {Route, Routes, useNavigate} from 'react-router-dom'
-import {Col, Row} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './css/App.css';
 import Game from "./component/Game";
