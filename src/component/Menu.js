@@ -11,10 +11,10 @@ function Menu() {
             <h2>Menu</h2>
             <div className="menu">
                 <Row className="p-2">
-                    <Button className="p-3" onClick={() => navigate('/play/pvp')} variant="primary">PvP</Button>
+                    <Button className="p-3" onClick={() => navigate('/play/pvp')} variant="primary">2 Players</Button>
                 </Row>
                 <Row className="p-2">
-                    <Button className="p-3" onClick={() => navigate('/play/pvc')} variant="success">PvC</Button>
+                    <Button className="p-3" onClick={() => navigate('/play/pvc')} variant="success">1 Player</Button>
                 </Row>
                 <Row className="p-2">
                     <Button className="p-3" onClick={() => navigate('/history')} variant="secondary">History</Button>

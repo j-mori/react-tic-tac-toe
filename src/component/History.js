@@ -21,18 +21,17 @@ function calculateGameResult(squares){
 
 function History() {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+
+    function navigateToGameReplay(squaresSetup){
+        navigate("/play/pvp",{
+            state:{"preloadGame":squaresSetup}
+        })
+    }
 
     function renderHistoryRow(game){
         return (
-            <Row className="game-history-row" onClick={
-                () => {
-                    navigate("/play/pvp",{
-                       state:{"preloadGame":game.squaresSetups}
-
-                    })
-                }
-            }>
+            <Row className="game-history-row" onClick={navigateToGameReplay(game.squaresSetups)}>
                 <Col>
                     {new Date(game.datetime).toLocaleString()}
                 </Col>
@@ -56,6 +55,8 @@ function History() {
     return (
         <div className="mt-4 history-container">
             <h4 className="mt-4">Games history</h4>
+            <span>Revive the most exciting moments of your last 30 games</span>
+            <i>Click a match to replay it!</i>
             <div>
                 {gamesHistory.map((item,index)=>{
                     return <div key={index} className="mt-4">{renderHistoryRow(item)}</div>
