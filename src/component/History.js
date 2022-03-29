@@ -24,7 +24,6 @@ function History() {
     const navigate = useNavigate()
 
     function navigateToGameReplay(squaresSetup){
-        console.log(squaresSetup);
         navigate("/play/pvp",{
             state:{"preloadGame":squaresSetup}
         })
