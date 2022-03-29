@@ -1,3 +1,6 @@
+import React, {Fragment} from "react";
+import btcIcon from "./../img/btc.png"
+import ethIcon from "./../img/eth.png"
 
 function calculateWinner(squares) {
     const lines = [
@@ -19,6 +22,17 @@ function calculateWinner(squares) {
     return null
 }
 
+function renderPlayerSymbol(player) {
+    return (
+        <Fragment>
+            {player ? <img alt={player} width={30} src={
+                player === "X" ? btcIcon : player === "O" ? ethIcon : null
+            }/> : null
+            }
+        </Fragment>
+    )
+}
 
 
-export {calculateWinner};
+
+export {calculateWinner,renderPlayerSymbol};

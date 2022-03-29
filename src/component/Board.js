@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect} from 'react';
 import '../css/Game.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {calculateWinner} from "../utils/common";
+import {calculateWinner, renderPlayerSymbol} from "../utils/common";
 import {Button} from "react-bootstrap";
 
 function calculateNextValue(squares) {
@@ -40,19 +40,6 @@ function findRandomSquare(squares) {
     } while (squares[rnd])
     return rnd;
 }
-
-function renderPlayerSymbol(player) {
-    return (
-        <Fragment>
-            {player ? <img alt={player} width={30} src={require(
-                player === "X" ? "./../img/btc.png" : "./../img/eth.png"
-            )}/> : ""
-            }
-        </Fragment>
-    )
-}
-
-
 
 function Board(props) {
 
